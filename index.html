@@ -1,0 +1,95 @@
+<html>
+    <!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="icone.jpg" type="image/x-icon">
+    <title>Buscador por CEP</title>
+
+    <script> 
+    function limpa_formulário_cep() {
+            document.getElementById('rua').value=("");
+            document.getElementById('bairro').value=("");
+            document.getElementById('cidade').value=("");
+            document.getElementById('uf').value=("");
+            document.getElementById('ibge').value=("");
+    }
+    function meu_callback(conteudo) {
+        if (!("erro" in conteudo)) {
+            document.getElementById('rua').value=(conteudo.logradouro);
+            document.getElementById('bairro').value=(conteudo.bairro);
+            document.getElementById('cidade').value=(conteudo.localidade);
+            document.getElementById('uf').value=(conteudo.uf);
+            document.getElementById('ibge').value=(conteudo.ibge);
+        }
+        else {
+            limpa_formulário_cep();
+            alert("CEP não encontrado, Tente Novamente!");
+        }
+    }   
+    function pesquisacep(valor) {
+        var cep = valor.replace(/\D/g, '');
+        if (cep != "") {
+            var validacep = /^[0-9]{8}$/;
+            if(validacep.test(cep)) {
+                document.getElementById('rua').value="...";
+                document.getElementById('bairro').value="...";
+                document.getElementById('cidade').value="...";
+                document.getElementById('uf').value="...";
+                document.getElementById('ibge').value="...";
+             
+                var script = document.createElement('script');
+                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+                document.body.appendChild(script);
+            }
+            else {
+                limpa_formulário_cep();
+                alert("CEP inválido, confira o formato e os números e Tente Novamente!");
+            }
+        }
+        else {
+            limpa_formulário_cep();
+        }
+    };
+    </script>
+    </head>
+    <style>
+        *{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body{background-color: #b9d9ee;
+        color: #000000;}
+        form{
+            color: black;
+            background-color: #b8f3bd;
+            border: solid rgb(17, 117, 4);
+        }
+
+        button {
+            background-color: rgb(240, 187, 151);
+        }
+        input{
+            border: solid rgb(17, 117, 4);
+        }
+    </style>
+    <body> 
+    <h1>Encontre o endereço a partir do CEP!</h1>
+    <h2>Digite o CEP abaixo:</h2>
+      <form method="get" action=".">
+        <label><strong>&rightarrow; Cep:</strong>
+        <input name="cep" type="text" id="cep" value="" size="10" maxlength="9"
+               onblur="pesquisacep(this.value);" /> <button type="button">Buscar &#x1F50D;</button></label><br/> 
+        <pre>
+
+<label>Rua:<input name="rua" type="text" id="rua" size="30" /></label><br />
+<label>Bairro:<input name="bairro" type="text" id="bairro" size="20" /></label><br/>
+<label>Cidade:<input name="cidade" type="text" id="cidade" size="20" /></label><br/>
+<label>Estado:<input name="uf" type="text" id="uf" size="2" /></label><br/>
+<label>IBGE:<input name="ibge" type="text" id="ibge" size="8" /></label></pre>
+            </form>
+            <h3>Por: <strong>Cleber Sena</strong></h3>
+    </body>
+    </html>
